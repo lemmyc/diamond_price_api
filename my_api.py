@@ -7,6 +7,7 @@ from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import StandardScaler
 
+from waitress import serve
 
 from scipy import stats
 
@@ -68,4 +69,5 @@ def predict_yolov6():
 
 # Start Backend
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port='6868')
+    serve(app, host="0.0.0.0", port=8080)
+    # app.run(host='0.0.0.0', port='6868')
