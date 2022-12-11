@@ -1,12 +1,12 @@
 from flask import Flask
 from flask_cors import CORS, cross_origin
 from flask import request
-import os
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import StandardScaler
-import json
+
+
 
 from scipy import stats
 
@@ -39,6 +39,12 @@ data_df = data_df.reset_index().iloc[:, 1:]
 X = data_df.iloc[:, [0,1,2,3,4,5,7,8,9]]
 Y = data_df.iloc[:, 6]
 
+depth_mean = data_df['depth'].mean()
+depth_std = data_df['depth'].std()
+
+table_mean = data_df['table'].mean()
+table_std = data_df['table'].std()
+
 le = LabelEncoder()
 for i in range(1, 4):
   X.iloc[:, i] = le.fit_transform(X.iloc[:, i])
@@ -59,7 +65,12 @@ def predict_dtr():
     if data:
         input_x  = []
         for key, value in data.items():
-            input_x.append(float(value))
+            if(key == 'depth'):
+                input_x.append((float(value) - depth_mean)/depth_std)
+            elif (key == 'table'):
+                input_x.append((float(value) - table_mean)/table_std)
+            else:
+                input_x.append(float(value))
         npa_input = np.array([input_x])
         price = dtr_model.predict(npa_input)
 
@@ -69,6 +80,4 @@ def predict_dtr():
 
 # Start Backend
 if __name__ == '__main__':
-    from waitress import serve
-    # serve(app, host="0.0.0.0", port=8080)
     app.run(host='0.0.0.0', port='6868')
