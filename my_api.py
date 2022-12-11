@@ -6,7 +6,7 @@ from sklearn.tree import DecisionTreeRegressor
 from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import StandardScaler
-
+import json
 
 from scipy import stats
 
@@ -53,8 +53,9 @@ dtr_model = DecisionTreeRegressor(random_state = 10).fit(X, y)
 
 @app.route('/', methods=['POST'] )
 def predict_dtr():
-    data = request.form.to_dict()
+    data = request.get_json()
 
+    
     if data:
         input_x  = []
         for key, value in data.items():
