@@ -7,7 +7,6 @@ from sklearn.impute import SimpleImputer
 from sklearn.preprocessing import LabelEncoder
 from sklearn.preprocessing import StandardScaler
 
-from waitress import serve
 
 from scipy import stats
 
@@ -53,7 +52,7 @@ y = Y.values
 dtr_model = DecisionTreeRegressor(random_state = 10).fit(X, y)
 
 @app.route('/', methods=['POST'] )
-def predict_yolov6():
+def predict_dtr():
     data = request.form.to_dict()
 
     if data:
@@ -69,5 +68,6 @@ def predict_yolov6():
 
 # Start Backend
 if __name__ == '__main__':
-    serve(app, host="0.0.0.0", port=8080)
-    # app.run(host='0.0.0.0', port='6868')
+    from waitress import serve
+    # serve(app, host="0.0.0.0", port=8080)
+    app.run(host='0.0.0.0', port='6868')
